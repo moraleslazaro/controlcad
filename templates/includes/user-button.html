@@ -1,0 +1,15 @@
+<button type="button" class="btn btn-default btn-lg" id="user-button"
+        data-toggle="popover" data-content="<div style='float:left;'>
+        <a href='{% url 'admin.views.logged_user_account_info' %}'
+        class='btn btn-primary'>Cuenta</a></div><div class='text-right'
+        id='button-logout'><a class='btn btn-default' href='/logout/'
+        style='padding-left:15px;padding-right:15px;'>Salir</a></div>"
+        title="<div id='user-data'>
+        {% if user.is_superuser %}Administrador{% else %}{{ user.get_full_name }}{% endif %}
+        </div><div id='user-role'>
+        {% if not user.is_superuser %}{{ user.get_role_display }}{% endif %}
+        </div><div id='user-email'>{{ user.email }}</div><div style='margin-top: 8px;'>
+        <a href='{% url 'admin.views.logged_user_change_password' %}'>Cambiar contraseña</a></div>">
+    <span class="glyphicon glyphicon-user"></span> {{ user.username }}
+    <span class="caret"></span>
+</button>

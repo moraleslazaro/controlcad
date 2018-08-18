@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block styles %}
+    <!-- Custom styles for this template -->
+    <link href="{% static 'controlcad/css/login.css' %}" rel="stylesheet">
+
+    <!-- FontAwesome -->
+    <link href="{% static 'font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <p class="masthead-brand text-center"><i class="fa fa-rocket"></i> ControlCAD</p>
+    <h1 class="login-text text-center">Autenticación</h1>
+    <h2 class="form-signin-heading text-center">Introduce tus datos</h2>
+
+    <div class="card card-signin">
+        <img class="img-circle profile-img" src="{% static 'controlcad/img/profile.png' %}"
+             alt="">
+
+        <form class="form-signin" role="form">
+            {% csrf_token %}
+            <input type="username" class="form-control" placeholder="Nombre de usuario"
+                   id="username" name="username" required autofocus />
+
+            <div id="login-error">
+                <input type="password" class="form-control" placeholder="Contraseña"
+                       id="password" name="password" required />
+
+                <label class="error-label" for="password">
+                    <i class="fa fa-question-circle fa-lg"></i> Usuario o contraseña incorrectos.
+                </label>
+            </div>
+
+            <button class="btn btn-lg btn-primary btn-block" id="submit">Entrar</button>
+
+            <div>
+                <a class="pull-right">¿Necesitas ayuda?</a>
+                <label class="checkbox">
+                    <input type="checkbox" value="remember-me" id="remember-me"
+                           name="remember-me" checked />
+                    Recordame
+                </label>
+            </div>
+
+            <input type="hidden" name="next" value="{{ next }}">
+        </form>
+    </div>
+
+    <p class="text-center">
+        <a>Crear una cuenta</a>
+    </p>
+
+</div> <!-- /container -->
+{% endblock %}
+
+{% block custom_script %}
+<script src="{% static 'controlcad/js/utils.js' %}"></script>
+<script>
+    (function () {
+        'use strict';
+
+        // On login submit...
+        $('.form-signin').on("submit", function (e) {
+            // Stop `form` to make its own request.
+            e.preventDefault();
+
+            // Set Ajax setup, this is necessary before any Ajax request.
+            // file `utils.js` needed.
+            var csrftoken = utils.getCookie('csrftoken');
+            utils.prepareAjax(csrftoken);
+
+            // Make an Ajax request to authenticate user.
+            $.ajax({
+                type: "POST",
+                url: "/login/",
+                data: {
+                    username: $('#username').val(),
+                    password: $('#password').val(),
+                    remember_me: $('#remember-me').prop('checked') ? 'remember-me' : ''
+                },
+                statusCode: {
+                    404: function () {
+                        // Display error message.
+                        $('#login-error').addClass('form-group has-error');
+                        $('.error-label:visible').fadeOut(); // If label is visible fade it out.
+                        $('.error-label').addClass('control-label').fadeIn().focus();
+                    },
+                    200: function () {
+                        // If user is authenticated show next page retrieved from Django.
+                        window.location = "{{ next }}";
+                    }
+                }
+            });
+        });
+    })();
+</script>
+{% endblock %}

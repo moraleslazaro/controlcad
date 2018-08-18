@@ -1,0 +1,173 @@
+[
+    {
+	"pk": "1",
+	"model": "admin.User",
+	"fields": {
+	    "username": "admin",
+	    "is_superuser": 1,
+	    "password": "pbkdf2_sha256$10000$2KdebNUsh8fG$aVkF0UFYuTY8PE1t\u002FpLSlX82nryjNVBGysuJWcA8zzI=",
+	    "is_active": 1,
+	    "email":"lazaro@frioclima.com.cu"
+	}
+    },
+    {
+	"pk": 1, 
+	"model": "cad.codificator", 
+	"fields": {
+	    "code": "V", 
+	    "description": "Compactos de ventana"
+	}
+    },
+    {
+	"pk": 2, 
+	"model": "cad.codificator", 
+	"fields": {
+	    "code": "C", 
+	    "description": "Climatizadoras"
+	}
+    },
+    {
+	"pk": 3, 
+	"model": "cad.codificator", 
+	"fields": {
+	    "code": "F", 
+	    "description": "Fan Coil b\u00e1sicos"
+	}
+    },
+    {
+	"pk": 4, 
+	"model": "cad.codificator", 
+	"fields": {
+	    "code": "LS", 
+	    "description": "Consolas b\u00e1sicas con muebles"
+	}
+    },
+    {
+	"pk": 5, 
+	"model": "cad.codificator", 
+	"fields": {
+	    "code": "LB", 
+	    "description": "Baja silueta"
+	}
+    },
+    {
+	"pk": 6, 
+	"model": "cad.codificator", 
+	"fields": {
+	    "code": "UA", 
+	    "description": "Semi-integral Industrial"
+	}
+    },
+    {
+	"pk": 7, 
+	"model": "cad.codificator", 
+	"fields": {
+	    "code": "UB", 
+	    "description": "Semi-integral de sal\u00f3n"
+	}
+    },
+    {
+	"pk": 8, 
+	"model": "cad.codificator", 
+	"fields": {
+	    "code": "R", 
+	    "description": "Roof-Top"
+	}
+    },
+    {
+	"pk": 9, 
+	"model": "cad.codificator", 
+	"fields": {
+	    "code": "E", 
+	    "description": "Enfriadoras y condensadoras (enfr\u00eda por aire)"
+	}
+    },
+    {
+	"pk": 10, 
+	"model": "cad.codificator", 
+	"fields": {
+	    "code": "M", 
+	    "description": "Enfriadoras y condensadoras (enfr\u00eda por aire)"
+	}
+    },
+    {
+	"pk": 11, 
+	"model": "cad.codificator", 
+	"fields": {
+	    "code": "W", 
+	    "description": "Enfriadoras y condensadoras (enfr\u00eda por aire)"
+	}
+    },
+    {
+	"pk": 12, 
+	"model": "cad.codificator", 
+	"fields": {
+	    "code": "CH", 
+	    "description": "Enfriadoras con ventilador centr\u00edfugo"
+	}
+    },
+    {
+	"pk": 13, 
+	"model": "cad.codificator", 
+	"fields": {
+	    "code": "N", 
+	    "description": "Enfriadoras de condensaci\u00f3n por agua"
+	}
+    },
+    {
+	"pk": 14, 
+	"model": "cad.codificator", 
+	"fields": {
+	    "code": "KB", 
+	    "description": "Unidad condensadora dom\u00e9stica"
+	}
+    },
+    {
+	"pk": 15, 
+	"model": "cad.codificator", 
+	"fields": {
+	    "code": "KC", 
+	    "description": "Enfriadoras y condensadoras enfriadas por aire"
+	}
+    },
+    {
+	"pk": 16, 
+	"model": "cad.codificator", 
+	"fields": {
+	    "code": "Q", 
+	    "description": "Equipos no est\u00e1ndar"
+	}
+    },
+    {
+	"pk": 17, 
+	"model": "cad.codificator", 
+	"fields": {
+	    "code": "Z", 
+	    "description": "Condensadoras c\u00e1maras fr\u00edas"
+	}
+    },
+    {
+	"pk": 18, 
+	"model": "cad.codificator", 
+	"fields": {
+	    "code": "PN", 
+	    "description": "Pieza normalizada"
+	}
+    },
+    {
+	"pk": 19, 
+	"model": "cad.codificator", 
+	"fields": {
+	    "code": "SN", 
+	    "description": "Subconjuntos normalizados"
+	}
+    },
+    {
+	"pk": 20, 
+	"model": "cad.codificator", 
+	"fields": {
+	    "code": "HV", 
+	    "description": "Compactos Horizontales y Verticales"
+	}
+    }  
+]

@@ -1,0 +1,81 @@
+{% extends 'cad/cad_base.html' %}
+
+{% block breadcrumb %}
+    <ol class="breadcrumb breadcrumb-sm">
+        <li><a href="{% url 'cad.views.list_draws' %}">Listado</a></li>
+        <li class="active">Plano {{ draw }}</li>
+    </ol>
+{% endblock %}
+
+{% block content %}
+    <div class="container main-content">
+        <div class="modal-dialog inline" style="width: 500px;">
+            <form method="POST" action="{% url 'cad.views.update_draw' name=draw.name %}">
+                {% csrf_token %}
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Plano {{ draw }}</h4>
+                    </div>
+                    <div class="modal-body cad-details">
+                        <ul class="nav nav-tabs nav-tabs-google">
+                            <li class="active"><a href="#">Información</a></li>
+                            <li><a href="{% url 'cad.views.show_draw_versions' name=draw.name %}">Versiones</a></li>
+                        </ul>
+
+                        <div class="well" style="margin-bottom: 0;padding-bottom: 10px;">
+                            <div class="form-group">
+                                <label for="codificator">Codificador</label>
+                                <select class="form-control" id="codificator" name="codificator">
+                                    <option></option>
+                                    {% for codificator in codificators %}
+                                        <option value="{{ codificator.code }}"
+                                                {% ifequal draw.codificator.code codificator.code %}
+                                                selected
+                                                {% endifequal %}> {{ codificator }} </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="description">Descripción</label>
+                                    <textarea class="form-control" id="description" rows="6"
+                                              placeholder="Descripción"
+                                              name="description" style="resize:none">{% if draw.description %}{{ draw.description }}{% endif %}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        {% if user.role == 'ING' %}
+                            <div class="text-left" style="float:left;">
+                                <a id="remove-button" class="btn btn-default" href="{% url 'cad.views.delete_draw' name=draw.name %}">
+                                    <span class="glyphicon glyphicon-trash"></span> Eliminar</a>
+                            </div>
+                        {% endif %}
+                        <a class="btn btn-default"
+                           href="{% url 'cad.views.list_draws' %}">
+                            Cancelar
+                        </a>
+                        <button class="btn btn-primary" type="submit">Aceptar</button>
+                    </div>
+                </div>
+            </form>
+        </div><!-- ./modal-dialog -->
+    </div>
+{% endblock %}
+
+{% block custom_script %}
+    <script>
+        $(document).ready(function () {
+            $("#codificator").select2({
+                placeholder: "Seleccione un codificador"
+            });
+
+            // Add confirmation on remove buttons.
+            $("a[id*='remove-button']").click(function() {
+                if (window.confirm("¿Está seguro de que desea eliminar el plano?")) {
+                    return true;
+                }
+                return false;
+            });
+        });
+    </script>
+{% endblock %}

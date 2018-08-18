@@ -1,0 +1,101 @@
+{% extends 'scan/schema/schema_base.html' %}
+
+{% block breadcrumb %}
+    <ol class="breadcrumb breadcrumb-sm">
+        <li><a href="{% url 'scan.views.list_schema' %}">Listado</a></li>
+        <li class="active">Plano {{ draw }}</li>
+    </ol>
+{% endblock %}
+
+{% block content %}
+    <div class="container main-content">
+        <div class="modal-dialog inline" style="width: 500px;">
+            <form method="POST" action="{% url 'scan.views.update_schema' reference=draw.reference %}"
+                  id="edit-schema-form">
+                {% csrf_token %}
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Plano {{ draw }}</h4>
+                    </div>
+                    <div class="modal-body cad-details">
+                        <ul class="nav nav-tabs nav-tabs-google">
+                            <li class="active"><a href="#">Información</a></li>
+                            <li>
+                                <a href="{% url 'scan.views.show_schema_preview' reference=draw.reference %}">Vista previa</a>
+                            </li>
+                        </ul>
+
+                        <div class="well" style="margin-bottom: 0;padding-bottom: 10px;">
+                            <div class="form-group" id="model-error">
+                                <label class="control-label" for="model">Modelo</label>
+                                <input type="text" name="model" id="model" placeholder="Modelo"
+                                       class="form-control" value="{{ draw.model }}" required/>
+                                <label class="error-label" for="model">
+                                    <i class="fa fa-question-circle fa-lg"></i> Caracteres inválidos.
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label for="codificator">Codificador</label>
+                                <select class="form-control" id="codificator" name="codificator">
+                                    <option></option>
+                                    {% for codificator in codificators %}
+                                        <option value="{{ codificator.code }}"
+                                                {% ifequal draw.codificator.code codificator.code %}
+                                                selected
+                                                {% endifequal %}> {{ codificator }} </option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        {% if user.role == 'ING' %}
+                            <div class="text-left" style="float:left;">
+                                <a id="remove-button" class="btn btn-default" href="{% url 'scan.views.delete_schema' filename=draw.filename%}">
+                                    <span class="glyphicon glyphicon-trash"></span> Eliminar</a>
+                            </div>
+                        {% endif %}
+                        <a class="btn btn-default"
+                           href="{% url 'scan.views.list_schema' %}">
+                            Cancelar
+                        </a>
+                        <button class="btn btn-primary" type="submit">Aceptar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!-- ./modal-dialog -->
+    </div>
+{% endblock %}
+
+
+{% block custom_script %}
+    <script>
+        $(document).ready(function () {
+            $("#codificator").select2({
+                placeholder: "Seleccione un codificador"
+            });
+
+            // Add confirmation on remove buttons.
+            $("a[id*='remove-button']").click(function() {
+                if (window.confirm("¿Está seguro de que desea eliminar el plano?")) {
+                    return true;
+                }
+                return false;
+            });
+
+            // Form validation
+            $('#edit-schema-form').submit(function () {
+                var model = $('#model').val();
+                if (!utils.validateString(model)) {
+                    $('#model-error').addClass('has-error');
+                    $('.error-label:visible').fadeOut(); // If label is visible fade it out.
+                    $('.error-label').addClass('control-label').fadeIn().focus();
+
+                    return false; // Don't submit.
+                }
+                return true; // Submit!
+            });
+        });
+    </script>
+{% endblock %}

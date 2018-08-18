@@ -1,0 +1,71 @@
+{% extends 'scan/schema/schema_base.html' %}
+
+{% block breadcrumb %}
+    <ol class="breadcrumb breadcrumb-sm">
+        <li><a href="{% url 'scan.views.list_schema' %}">Listado</a></li>
+        <li class="active">Subir</li>
+    </ol>
+{% endblock %}
+
+{% block content %}
+    <div class="container main-content">
+        <div class="modal-dialog inline" style="width: 400px;">
+            <form method="POST" action="" enctype="multipart/form-data" role="form" id="upload-schema-form">
+                {% csrf_token %}
+                <input type="hidden" name="previous" value="">
+
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Añadir esquema</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group" id="model-error">
+                            <label class="control-label" for="model">Modelo</label>
+                            <input type="text" name="model" id="model" placeholder="Modelo"
+                                   class="form-control" required autofocus/>
+                            <label class="error-label" for="model">
+                                <i class="fa fa-question-circle fa-lg"></i> Caracteres inválidos.
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label for="file">Seleccione un fichero</label>
+                            <input type="file" id="file" name="file">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <a class="btn btn-default" href="{% url 'scan.views.list_schema' %}">
+                            Cancelar
+                        </a>
+                        <button class="btn btn-danger" type="submit"><span class="glyphicon glyphicon-open"></span>
+                            SUBIR
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!-- ./modal-dialog -->
+    </div>
+{% endblock %}
+
+{% block custom_script %}
+    <script>
+        $(document).ready(function () {
+            $("#type").select2({
+                placeholder: "Seleccione un tipo",
+                minimumResultsForSearch: 4
+            });
+
+            $('#upload-schema-form').submit(function () {
+                var model = $('#model').val();
+                if (!utils.validateString(model)) {
+                    $('#model-error').addClass('has-error');
+                    $('.error-label:visible').fadeOut(); // If label is visible fade it out.
+                    $('.error-label').addClass('control-label').fadeIn().focus();
+
+                    return false; // Don't submit.
+                }
+                return true; // Submit!
+            });
+        });
+    </script>
+{% endblock %}

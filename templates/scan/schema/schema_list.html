@@ -1,0 +1,169 @@
+{% extends 'scan/schema/schema_base.html' %}
+
+{% block content %}
+    <div class="container main-content">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="container toolbar">
+                    <div class="row">
+                        <div class="container toolbar">
+                            <div class="row">
+                                <div class="col-md-4 panel-search">
+                                    <form method="GET" action="" id="search-form">
+                                        <div class="input-group">
+                                            <input class="form-control" type="text" name="q" value="{{ query }}"
+                                                   placeholder="Buscar por referencia o modelo" id="query">
+                                            <span class="input-group-btn">
+                                              <button class="btn btn-primary" type="submit">
+                                                  <span class="glyphicon  glyphicon-search"></span>
+                                              </button>
+                                            </span>
+                                        </div>
+                                    </form>
+                                </div>
+
+                                <div class="col-md-5 panel-buttons">
+                                    <button class="btn btn-default reload">
+                                        <span class="glyphicon glyphicon-refresh"></span> Actualizar
+                                    </button>
+                                    <a href="{% url 'scan.views.upload_schema' %}"
+                                       class="btn btn-default">
+                                        <span class="glyphicon glyphicon-plus"></span> Adicionar
+                                    </a>
+                                </div>
+
+                                <div class="col-md-offset-8" align="right">
+                                    <div class="input-group" id="pagination-box" align="right">
+                                        <!-- Text filled dinamically with JavaScript -->
+                                        <label class="paginator-text"></label>
+                                    <span class="input-group-btn">
+                                        {% if draws.has_previous %}
+                                            <a href="?{% if query %}q={{ query }}&{% endif %}page={{ draws.previous_page_number }}" class="btn btn-default">
+                                                <i class="fa fa-chevron-left"></i>
+                                            </a>
+                                        {% else %}
+                                            <a type="button" class="btn btn-default disabled">
+                                                <i class="fa fa-chevron-left"></i>
+                                            </a>
+                                        {% endif %}
+
+                                        {% if draws.has_next %}
+                                            <a href="?{% if query %}q={{ query }}&{% endif %}page={{ draws.next_page_number }}" class="btn btn-default">
+                                                <i class="fa fa-chevron-right"></i>
+                                            </a>
+                                        {% else %}
+                                            <a class="btn btn-default disabled">
+                                                <i class="fa fa-chevron-right"></i>
+                                            </a>
+                                        {% endif %}
+                                    </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel-body">
+                {% ifequal draws.paginator.count 0 %}
+                    <div>No hay ningún elemento que mostrar</div>
+                {% else %}
+                    <table class="table table-hover data-grid">
+                        <thead>
+                        <tr>
+                            <th class="text-danger">NOMBRE</th>
+                            <th>REFERENCIA</th>
+                            <th>MODELO</th>
+                            <th>FORMATO</th>
+                            <th>TAMAÑO</th>
+                            <th>FECHA</th>
+                            <th>SUBIDO POR</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        {% for file in draws %}
+                            <tr>
+                                <td>
+                                    <span class="glyphicon glyphicon-picture"></span>
+                                    <a href="{% url 'scan.views.show_schema_info' reference=file.reference %}">
+                                        {{ file.filename }}
+                                    </a>
+                                </td>
+                                <td>{{ file.reference }}</td>
+                                <td>{{ file.model }}</td>
+                                <td>{{ file.get_content_type_display  }}, {{ file.image.width }} x {{ file.image.height }} pixels</td>
+                                <td>{{ file.image.size | filesizeformat }}</td>
+                                <td>{{ file.date | date:"d M Y h:i a" }}</td>
+                                <td>{{ file.author.get_full_name }}</td>
+                                <td align="right">
+                                    {% if user.role == 'ING' %}
+                                        <div class="btn-group">
+                                            <a href="{% url 'scan.views.schema_inline' filename=file.filename %}"
+                                               style="font-weight: bold;" data-lightbox="{{ file.filename }}"
+                                               data-title="{{ file.filename }}" data-toggle="tooltip" title="Ver"
+                                               class="btn btn-default btn-xs">
+                                                <span class="glyphicon glyphicon-eye-open"></span>
+                                            </a>
+                                            <a href="{% url 'scan.views.schema_download' filename=file.filename %}"
+                                               class="btn btn-default btn-xs" data-toggle="tooltip" title="Descargar">
+                                                <span class="glyphicon glyphicon-download-alt"></span>
+                                            </a>
+                                            <a id="remove-button" href="{% url 'scan.views.delete_schema' filename=file.filename %}"
+                                               data-toggle="tooltip"
+                                               title="Eliminar" class="btn btn-default btn-xs">
+                                                <span class="glyphicon glyphicon-trash"></span>
+                                            </a>
+                                        </div>
+                                    {% else %}
+                                        <div class="btn-group">
+                                            <a href="{% url 'scan.views.schema_download' filename=file.filename %}"
+                                               class="btn btn-default btn-xs" data-toggle="tooltip" title="Descargar">
+                                                <span class="glyphicon glyphicon-download-alt"></span>
+                                            </a>
+                                            <a href="{% url 'scan.views.schema_inline' filename=file.filename %}"
+                                               style="font-weight: bold;" data-lightbox="{{ file.filename }}"
+                                               data-title="{{ file.filename }}" data-toggle="tooltip" title="Ver"
+                                               class="btn btn-default btn-xs">
+                                                <span class="glyphicon glyphicon-eye-open"></span>
+                                            </a>
+                                        </div>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                {% endifequal %}
+            </div><!-- ./panel -->
+        </div>
+    </div>
+{% endblock %}
+
+{% block custom_script %}
+    <script>
+        (function () {
+            // Reload button
+            $('.reload').on('click', function (e) {
+                e.preventDefault();
+                window.location.reload();
+            });
+
+            // Fill paginator
+            var start_index = {{ draws.start_index }};
+            var end_index = {{ draws.end_index }};
+            var count = {{ draws.paginator.count }};
+            $('.paginator-text').text(start_index + '-' + end_index + ' de ' + count );
+
+            // Add confirmation on remove buttons.
+            $("a[id*='remove-button']").click(function() {
+                if (window.confirm("¿Está seguro de que desea eliminar el plano?")) {
+                    return true;
+                }
+                return false;
+            });
+        })();
+    </script>
+{% endblock %}

@@ -1,0 +1,113 @@
+{% extends 'equips/equips_base.html' %}
+
+{% block breadcrumb %}
+    <ol class="breadcrumb breadcrumb-sm">
+        <li><a href="{% url 'condis.views.list_equips' %}">Listado</a></li>
+        <li class="active">Equipo {{ equip.codequipo }}</li>
+    </ol>
+{% endblock %}
+
+{% block content %}
+    <div class="container main-content">
+        <div class="modal-dialog inline">
+            {% csrf_token %}
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Equipo {{ equip.codequipo }}</h4>
+                </div>
+                <div class="modal-body cad-details">
+                    <div class="well" style="margin-bottom: 0;">
+                        <div class="panel panel-default cad-versions-panel"
+                             style="background-color: #fff; margin-bottom: 0; border-radius: 0;">
+                            <div class="body">
+                                <table class="table table-hover table-condensed" style="margin-bottom: 0px;">
+                                    <thead>
+                                    <tr>
+                                        <th>ESQUEMA</th>
+                                        <th>TAMAÑO</th>
+                                        <th>FECHA</th>
+                                        <th>SUBIDO POR</th>
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for schema in schemas %}
+                                        <tr>
+                                            <td>{{ schema.reference }}</td>
+                                            <td>{{ schema.image.size | filesizeformat }}</td>
+                                            <td>{{ schema.date | date:"d M Y h:i a" }}</td>
+                                            <td>{{ schema.author.get_full_name }}</td>
+                                            <td align="right">
+                                                <div class="btn-group">
+                                                    <a href="{% url 'scan.views.schema_inline' filename=schema.filename %}"
+                                                       data-toggle="tooltip" title="Ver"
+                                                       data-lightbox="{{ schema.filename }}"
+                                                       data-title="{{ schema.filename }}"
+                                                       class="btn btn-default btn-xs">
+                                                        <span class="glyphicon glyphicon-eye-open"></span>
+                                                    </a>
+                                                    <a href="{% url 'scan.views.schema_download' filename=schema.filename %}"
+                                                       data-toggle="tooltip" title="Descargar"
+                                                       class="btn btn-default btn-xs">
+                                                        <span class="glyphicon glyphicon-download-alt"></span>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="footer">
+                                <div class="cad-version-paginator" align="right">
+                                    <span style="font-weight: bold;" id="paginator-text"></span>
+
+                                    <div class="btn-group">
+                                        {% if schemas.has_previous %}
+                                            <a href="?page={{ schemas.previous_page_number }}"
+                                               class="btn btn-default btn-xs">
+                                                <i class="fa fa-chevron-left"></i>
+                                            </a>
+                                        {% else %}
+                                            <button type="button" class="btn btn-default btn-xs disabled">
+                                                <i class="fa fa-chevron-left"></i>
+                                            </button>
+                                        {% endif %}
+
+                                        {% if dwgs.has_next %}
+                                            <a href="?page={{ schemas.next_page_number }}"
+                                               class="btn btn-default btn-xs">
+                                                <i class="fa fa-chevron-right"></i>
+                                            </a>
+                                        {% else %}
+                                            <a class="btn btn-default btn-xs disabled">
+                                                <i class="fa fa-chevron-right"></i>
+                                            </a>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer" style="margin-top: 0;">
+                    <a class="btn btn-default" href="{% url 'condis.views.list_equips' %}">Cancelar</a>
+                    <a class="btn btn-primary" href="{% url 'condis.views.list_equips' %}">Aceptar</a>
+                </div>
+            </div>
+        </div>
+        <!-- ./modal-dialog -->
+    </div>
+{% endblock %}
+
+{% block custom_script %}
+<script>
+    (function() {
+        // Fill paginator
+            var start_index = {{ schemas.start_index }};
+            var end_index = {{ schemas.end_index }};
+            var count = {{ schemas.paginator.count }};
+            $('#paginator-text').text(start_index + '-' + end_index + ' de ' + count );
+    })();
+</script>
+{% endblock %}

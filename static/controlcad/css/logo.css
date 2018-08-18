@@ -1,0 +1,22 @@
+@import url("../../open-sans/css/open-sans.css");
+
+/* Logo */
+.masthead-brand {
+    font-family: "Open Sans Condensed", Arial;
+    font-weight: 700;
+    font-size: 24px;
+}
+
+.navbar-brand {
+    font-family: "Open Sans Condensed", Arial;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.page-title {
+    font-family: "Open Sans", Arial;
+    font-weight: 400;
+    font-size: 24px;
+}
+
+

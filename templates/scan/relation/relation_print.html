@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block body %}
+    <img src="{% url 'scan.views.relation_inline' filename=draw.filename %}">
+{% endblock %}
+
+{% block custom_script %}
+<script>
+$(document).ready(function () {
+    window.print();
+});
+</script>
+{% endblock %}

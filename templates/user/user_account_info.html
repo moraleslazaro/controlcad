@@ -1,0 +1,150 @@
+{% extends 'user/user_base.html' %}
+{% load static %}
+
+{% block breadcrumb %}
+    <ol class="breadcrumb breadcrumb-sm">
+        <li class="active">Cuenta de usuario</li>
+    </ol>
+{% endblock %}
+
+{% block page_title %}
+    <img class="image-title" src="{% static 'controlcad/img/email.png' %}" alt="">
+    Cuenta de usuario
+{% endblock %}
+
+{% block content %}
+    <div class="container main-content">
+        <div class="modal-dialog inline" style="width: 400px;">
+            <form method="POST" action="{% url 'admin.views.logged_user_account_info' %}" class="form-horizontal"
+                  role="form" id="user-account-form">
+                {% csrf_token %}
+                <input type="hidden" name="previous" value="{{ previous }}">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Datos de usuario </h4>
+                    </div>
+                    <div class="modal-body">
+                        {% if user.is_superuser %}
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Usuario</label>
+
+                                <div class="col-sm-9">
+                                    <p class="form-control-static">{{ user.username }}</p>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="form-group" id="username-error">
+                                <label for="username" class="col-sm-3 control-label">Usuario</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" id="username"
+                                           placeholder="Nombre de usuario"
+                                           value="{{ user.username }}" name="username" required autofocus>
+                                    <label class="error-label" for="username" id="username-error-label">
+                                        <i class="fa fa-question-circle fa-lg"></i> Caracteres inválidos.
+                                    </label>
+                                </div>
+                            </div>
+                        {% endif %}
+                        {% if not user.is_superuser %}
+                            <div class="form-group" id="first-name-error">
+                                <label for="first-name" class="col-sm-3 control-label">Nombre</label>
+
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" id="first-name" placeholder="Nombre"
+                                           value="{{ user.first_name }}" name="first-name" required>
+                                    <label class="error-label" for="first-name" id="first-name-error-label">
+                                        <i class="fa fa-question-circle fa-lg"></i> Caracteres inválidos.
+                                    </label>
+                                </div>
+                            </div>
+                        {% endif %}
+                        {% if not user.is_superuser %}
+                            <div class="form-group" id="last-name-error">
+                                <label for="last-name" class="col-sm-3 control-label">Apellido</label>
+
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" id="last-name" placeholder="Apellido"
+                                           value="{{ user.last_name }}" name="last-name" required>
+                                    <label class="error-label" for="last-name" id="last-name-error-label">
+                                        <i class="fa fa-question-circle fa-lg"></i> Caracteres inválidos.
+                                    </label>
+                                </div>
+                            </div>
+                        {% endif %}
+                        <div class="form-group">
+                            <label for="email" class="col-sm-3 control-label">Email</label>
+
+                            <div class="col-sm-9">
+                                <input type="email" class="form-control" id="email" placeholder="Email"
+                                        value="{{ user.email }}" name="email" required>
+                            </div>
+                        </div>
+                        {% if not user.is_superuser %}
+                            <div class="form-group">
+                                <label class="col-sm-3 control-label">Categoría</label>
+
+                                <div class="col-sm-9">
+                                    <p class="form-control-static">{{ user.get_role_display }}</p>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="modal-footer">
+                        <div class="text-left" style="float:left;">
+                            <a class="btn btn-default" href="{% url 'admin.views.logged_user_change_password' %}">
+                                <span class="glyphicon glyphicon-lock"></span> Contraseña</a>
+                        </div>
+                        <a class="btn btn-default" href="{% url 'cad.views.start_view' %}">Cancelar</a>
+                        <button class="btn btn-primary" type="submit">Aceptar</button>
+                    </div>
+                </div>
+            </form>
+        </div><!-- ./modal-dialog -->
+    </div>
+{% endblock %}
+
+{% block custom_script %}
+    <script>
+        (function () {
+            $('#user-account-form').submit(function () {
+                var username  = $('#username').val();
+                var firstname = $('#first-name').val();
+                var lastname  = $('#last-name').val();
+
+                var is_form_valid = true;
+
+                if (!utils.validateString(username)) {
+                    $('#username-error').addClass('has-error');
+                    $('#username-error-label:visible').fadeOut(); // If label is visible fade it out.
+                    $('#username-error-label').addClass('control-label').fadeIn().focus();
+                    is_form_valid = false;
+                } else {
+                    $('#username-error').removeClass('has-error');
+                    $('#username-error-label').hide();
+                }
+
+                if (!utils.spanishValidation(firstname)) {
+                    $('#first-name-error').addClass('has-error');
+                    $('#first-name-error-label:visible').fadeOut(); // If label is visible fade it out.
+                    $('#first-name-error-label').addClass('control-label').fadeIn().focus();
+                    is_form_valid = false;
+                } else {
+                    $('#first-name-error').removeClass('has-error');
+                    $('#first-name-error-label').hide();
+                }
+
+                if (!utils.spanishValidation(lastname)) {
+                    $('#last-name-error').addClass('has-error');
+                    $('#last-name-error-label:visible').fadeOut(); // If label is visible fade it out.
+                    $('#last-name-error-label').addClass('control-label').fadeIn().focus();
+                    is_form_valid = false;
+                } else {
+                    $('#last-name-error').removeClass('has-error');
+                    $('#last-name-error-label').hide();
+                }
+
+                return is_form_valid; // If everything is right submit.
+            });
+        })();
+    </script>
+{% endblock %}

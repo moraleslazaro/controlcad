@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block styles %}
+    <!-- Custom styles for this template -->
+    <link href="{% static 'controlcad/css/start.css' %}" rel="stylesheet">
+
+    <!-- FontAwesome -->
+    <link href="{% static 'font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
+{% endblock %}
+
+{% block body %}
+<div class="site-wrapper">
+    <div class="site-wrapper-inner">
+        <div class="cover-container">
+            <div class="masthead clearfix">
+                <div class="inner">
+                    <h3 class="masthead-brand">
+                        <i class="fa fa-rocket"></i> ControlCAD
+                    </h3>
+                    <ul class="nav masthead-nav">
+                        <li id="draws-item" class="active"><a
+                                id="draws-link" href="#">AutoCAD</a></li>
+                        <li id="projects-item"><a id="projects-link" href="#">Escaneados</a></li>
+                        <li id="tasks-item">
+                            <a id="tasks-link" href="#">Equipos</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="inner cover">
+                <div id="cover-carousel" class="carousel slide">
+                    <!-- Carousel items -->
+                    <div class="carousel-inner">
+                        <div class="item active">
+                            <h1><i class="fa fa-code-fork fa-3x"></i></h1>
+
+                            <h1 class="cover-heading">Organiza tus planos</h1>
+
+                            <p class="lead">Crea o
+                                actualiza un plano de AutoCAD sin perder la
+                                versión anterior. Accede fácilmente al repositorio de planos de AutoCAD y
+                                contribuye a su enriquecimiento.</p>
+
+                            <p class="lead">
+                                <a href="/login/" class="btn btn-outline-inverse btn-lg">Empezar</a>
+                            </p>
+                        </div>
+
+                        <div class="item">
+                            <h1><i class="fa fa-picture-o fa-3x"></i>
+                            </h1>
+
+                            <h1 class="cover-heading">Visualiza las imágenes</h1>
+
+                            <p class="lead">Los planos escaneados se almacenan en forma de imágenes, permitiendo
+                                así visualizarlos directamente en el navegador. Estos planos se encuentran asociados
+                                a los equipos realizados.</p>
+
+                            <p class="lead">
+                                <a href="/login/"
+                                   class="btn btn-outline-inverse btn-lg">Empezar</a>
+                            </p>
+                        </div>
+
+                        <div class="item">
+                            <h1><i class="fa fa-search fa-3x"></i></h1>
+
+                            <h1 class="cover-heading">Localiza los equipos</h1>
+
+                            <p class="lead">Busca rápidamente los equipos
+                                realizados en <strong>CONDIS</strong> y localiza los planos que tienen
+                                asociados. Si un plano no se encuentra disponible puedes
+                                subirlo y actualizar la información de los equipos.</p>
+
+                            <p class="lead">
+                                <a href="/login/" class="btn btn-outline-inverse btn-lg">Empezar</a>
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="mastfoot">
+                <div class="inner">
+                    <p class="text-muted credit">
+
+                    <p>&copy; 2015 FRIOCLIMA
+                        &middot; <a href="#">Privacidad</a>
+                        &middot; <a href="#">Términos</a>
+                        &middot; <a href="http://www.frioclima.com.cu">Sitio oficial</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts_files %}
+<script src="{% static 'controlcad/js/start.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,208 @@
+{% extends 'admin/admin_base.html' %}
+{% load static %}
+
+{% block page_title %}
+    <img class="image-title" src="{% static 'controlcad/img/speedometer.png' %}" alt=""> Estadísticas de uso
+{% endblock %}
+
+{% block breadcrumb %}
+    <ol class="breadcrumb breadcrumb-sm">
+        <li class="active">Estadísticas</li>
+    </ol>
+{% endblock %}
+
+{% block content %}
+    <div class="container main-content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="panel panel-default" style="margin-bottom: 5px;">
+                    <div class="panel-body">
+                        <div class="container" id="chart-top"
+                             style="width: inherit; margin-bottom: 40px; margin-right: 20px;
+                         padding-right: 25px; margin-top: 20px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-9" style="padding-right: 0;">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div id="chart-bottom-left" style="margin-bottom: 10px; margin-top: 20px;"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3" style="padding-left: 5px;">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div id="chart-bottom-right" style="margin-bottom: 10px; margin-right: 20px; margin-top: 20px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block scripts_files %}
+    <script src="{% static 'controlcad/js/common.js' %}"></script>
+    <script src="{% static 'todc-select/select2.js' %}"></script>
+    <script src="{% static 'highcharts/highcharts.js' %}"></script>
+{% endblock %}
+
+{% block custom_script %}
+    <script>
+        $(function () {
+            // Globally disable animation.
+            Highcharts.setOptions({
+                plotOptions: {
+                    series: {
+                        animation: false
+                    }
+                }
+            });
+
+            $('#chart-top').highcharts({
+                chart: {
+                    type: 'area'
+                },
+                title: {
+                    text: 'Promedio de planos subidos en la semana'
+                },
+                subtitle: {
+                    style: {
+                        position: 'inhereit',
+                        right: '0px',
+                        bottom: '10px'
+                    }
+                },
+                legend: {
+                    layout: 'vertical',
+                    align: 'right',
+                    verticalAlign: 'top',
+                    x: -150,
+                    y: 100,
+                    floating: true,
+                    borderWidth: 1,
+                    backgroundColor: (Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'
+                },
+                xAxis: {
+                    categories: [
+                        'Lunes',
+                        'Martes',
+                        'Miércoles',
+                        'Jueves',
+                        'Viernes'
+                    ]
+                },
+                yAxis: {
+                    title: {
+                        text: 'Cantidad de planos'
+                    },
+                    labels: {
+                        formatter: function () {
+                            return this.value;
+                        }
+                    },
+                    min: 0,
+                    allowDecimals: false
+                },
+                plotOptions: {
+                    area: {
+                        fillOpacity: 0.5
+                    }
+                },
+                series: [
+                    {
+                        name: 'AutoCAD',
+                        data: [{% for item in dwg_data %}{{ item }},{% endfor %}]
+                    },
+                    {
+                        name: 'Escaneados',
+                        data: [{% for item in scan_data %}{{ item }},{% endfor %}]
+                    }
+                ]
+            });
+
+            // Build the chart
+           // TODO: Would be nice if integers are used.
+            $('#chart-bottom-right').highcharts({
+                chart: {
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: false
+                },
+                title: {
+                    text: 'Por ciento de planos subidos por usuario'
+                },
+                tooltip: {
+                    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: false
+                        },
+                        showInLegend: true
+                    }
+                },
+                series: [
+                    {
+                        type: 'pie',
+                        name: 'Planos',
+                        data: [
+                            {% for user in users_list %}
+                                ['{{ user.username }}', {{ user.dwg_per_cent }}],
+                            {% endfor %}
+                        ]
+                    }
+                ]
+            });
+
+            $('#chart-bottom-left').highcharts({
+            chart: {
+                type: 'column'
+            },
+            legend: {
+                enabled: false
+            },
+            title: {
+                text: 'Cantidad de planos por versiones de AutoCAD'
+            },
+            xAxis: {
+                categories: [{% for versions in dwg_versions_desc %}'{{ versions }}',{% endfor %}]
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Cantidad de Planos'
+                },
+                allowDecimals: false
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y}</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+            series: [{
+                name: 'Cantidad',
+                data: [{% for qty in dwg_versions_qty %}{{ qty }},{% endfor %}]
+
+            }]
+        });
+
+
+        });
+    </script>
+{% endblock %}

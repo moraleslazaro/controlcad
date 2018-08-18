@@ -1,0 +1,154 @@
+{% extends 'cad/cad_base.html' %}
+
+{% block breadcrumb %}
+    <ol class="breadcrumb breadcrumb-sm">
+        <li><a href="{% url 'cad.views.list_draws' %}">Listado</a></li>
+        <li class="active">Plano {{ draw }}</li>
+    </ol>
+{% endblock %}
+
+{% block content %}
+    <div class="container main-content">
+        <div class="modal-dialog inline draw-details">
+            <form method="POST" action="">
+                {% csrf_token %}
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Plano {{ draw.name }}</h4>
+                    </div>
+                    <div class="modal-body cad-details">
+                        <ul class="nav nav-tabs nav-tabs-google versions-nav">
+                            <li><a href="{% url 'cad.views.show_draw_info' name=draw.name %}">Información</a></li>
+                            <li class="active"><a href="#">Versiones</a></li>
+                        </ul>
+
+                        <div class="well" style="margin-bottom: 0; padding: 10px;">
+                            <div class="panel panel-default cad-versions-panel"
+                                 style="background-color: #fff; margin-bottom: 0; border-radius: 0px;">
+                                <div class="body">
+                                    <table class="table table-hover table-condensed" style="margin-bottom: 0px;">
+                                        <thead>
+                                        <tr>
+                                            <th>FECHA</th>
+                                            <th>TAMAÑO</th>
+                                            <th>COMPATIBILIDAD</th>
+                                            <th>SUBIDO POR</th>
+                                            <th>APROBADO POR</th>
+                                            <th></th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for file in dwgs %}
+                                            <tr onmouseover="$('#file-comment').text('{{ file.comment | truncatechars:"80"  }}');"
+                                                onmouseleave="$('#file-comment').text('');">
+                                                <td>{{ file.date | date:"d M Y h:i a" }}</td>
+                                                <td>{{ file.size | filesizeformat }}</td>
+                                                <td>{{ file.get_compatibility_display }}</td>
+                                                <td>{{ file.author.get_full_name }}</td>
+                                                <td>
+                                                    {% if file.public %}
+                                                        {{ file.publisher.get_full_name }}
+                                                    {% else %}
+                                                        <b><i class="fa fa-clock-o"></i> En espera</b>
+                                                    {% endif %}
+                                                </td>
+                                                <td align="right">
+                                                    {% if file.public %}
+                                                        <div class="btn-group">
+                                                            {% if user.role == 'DIB' or user.role == 'PRO' %}
+                                                                <a href="{% url 'cad.views.download_dwg' md5=file.md5 %}"
+                                                                   class="btn btn-default btn-xs">
+                                                                    <span class="glyphicon glyphicon-download-alt"></span>
+                                                                    Descargar
+                                                                </a>
+                                                            {% else %}
+                                                                <a href="{% url 'cad.views.download_dwg' md5=file.md5 %}"
+                                                                   data-toggle="tooltip" title="Descargar"
+                                                                   class="btn btn-default btn-xs">
+                                                                    <span class="glyphicon glyphicon-download-alt"></span>
+                                                                </a>
+                                                                <a id="remove-button" href="{% url 'cad.views.delete_dwg' md5=file.md5 %}"
+                                                                   data-toggle="tooltip" title="Eliminar"
+                                                                   class="btn btn-default btn-xs">
+                                                                    <span class="glyphicon glyphicon-trash"></span>
+                                                                </a>
+                                                            {% endif %}
+                                                        </div>
+                                                    {% endif %}
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="footer">
+                                    <!-- Filled with JavaScript -->
+                                    <span id="file-comment" style="float: left;">&nbsp;</span>
+
+                                    <div class="cad-version-paginator" align="right">
+                                        <!-- Info filled with JavaScript -->
+                                        <span style="font-weight: bold;" id="paginator-text"></span>
+
+                                        <div class="btn-group">
+                                            {% if dwgs.has_previous %}
+                                                <a href="{% url 'cad.views.show_draw_versions' name=draw.name %}?page={{ dwgs.previous_page_number }}"
+                                                   class="btn btn-default btn-xs">
+                                                    <i class="fa fa-chevron-left"></i>
+                                                </a>
+                                            {% else %}
+                                                <button type="button" class="btn btn-default btn-xs disabled">
+                                                    <i class="fa fa-chevron-left"></i>
+                                                </button>
+                                            {% endif %}
+
+                                            {% if dwgs.has_next %}
+                                                <a href="{% url 'cad.views.show_draw_versions' name=draw.name %}?page={{ dwgs.next_page_number }}"
+                                                   class="btn btn-default btn-xs">
+                                                    <i class="fa fa-chevron-right"></i>
+                                                </a>
+                                            {% else %}
+                                                <a class="btn btn-default btn-xs disabled">
+                                                    <i class="fa fa-chevron-right"></i>
+                                                </a>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <div class="text-left" style="float:left;">
+                            <a class="btn btn-default"
+                               href="{% url 'cad.views.upload_dwg' %}?previous={% url 'cad.views.show_draw_versions' draw.name %}">
+                            <span class="glyphicon glyphicon-plus"></span> Adicionar</a></div>
+                        <a class="btn btn-default" href="{% url 'cad.views.list_draws' %}">Cancelar</a>
+                        <a class="btn btn-primary" href="{% url 'cad.views.list_draws' %}">Aceptar</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!-- ./modal-dialog -->
+    </div>
+{% endblock %}
+
+{% block custom_script %}
+    <script>
+        (function () {
+            // Fill paginator
+            var start_index = {{ dwgs.start_index }};
+            var end_index = {{ dwgs.end_index }};
+            var count = {{ dwgs.paginator.count }};
+            $('#paginator-text').text(start_index + '-' + end_index + ' de ' + count );
+
+            // Add confirmation on remove buttons.
+            $("a[id*='remove-button']").click(function() {
+                if (window.confirm("¿Está seguro de que desea eliminar el plano?")) {
+                    return true;
+                }
+                return false;
+            });
+        })();
+    </script>
+{% endblock %}

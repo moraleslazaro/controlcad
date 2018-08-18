@@ -1,0 +1,116 @@
+{% extends 'scan/relation/relation_base.html' %}
+
+{% block breadcrumb %}
+    <ol class="breadcrumb breadcrumb-sm">
+        <li><a href="{% url 'scan.views.list_relation' %}">Listado</a></li>
+        <li class="active">Plano {{ draw }}</li>
+    </ol>
+{% endblock %}
+
+{% block content %}
+    <div class="container main-content">
+        <div class="modal-dialog inline" style="width: 500px;">
+            <form method="POST" action="{% url 'scan.views.update_relation' code=draw.code %}"
+                    id="edit-relation-form">
+                {% csrf_token %}
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Plano {{ draw }}</h4>
+                    </div>
+                    <div class="modal-body cad-details">
+                        <ul class="nav nav-tabs nav-tabs-google">
+                            <li class="active"><a href="#">Información</a></li>
+                            <li>
+                                <a href="{% url 'scan.views.show_relation_preview' code=draw.code %}">Vista previa</a>
+                            </li>
+                            {% if schema %}
+                                <li>
+                                    <a href="{% url 'scan.views.show_relation_schema' code=draw.code %}">Esquema</a>
+                                </li>
+                            {% endif %}
+                        </ul>
+
+                        <div class="well" style="margin-bottom: 0;padding-bottom: 10px;">
+                            <div class="form-group" id="relation-error">
+                                <label class="control-label" for="reference">Referencia</label>
+                                <input type="text" name="reference" id="reference" placeholder="Referencia"
+                                       class="form-control" value="{{ draw.reference }}" required/>
+                                <label class="error-label" for="model">
+                                    <i class="fa fa-question-circle fa-lg"></i> Caracteres inválidos.
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label" for="type">Tipo</label>
+                                <select class="form-control" id="type" name="type" required>
+                                    <option></option>
+                                    <option value="H" {% if draw.type == 'H' %}selected{% endif %}>Horizontal</option>
+                                    <option value="V" {% if draw.type == 'V' %}selected{% endif %}>Vertical</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label">Esquema asociado</label>
+                                {% if schema %}
+                                    <p class="form-control-static text-success" style="font-weight: bold;">
+                                        <span class="glyphicon glyphicon-ok"></span> Disponible
+                                    </p>
+                                {% else %}
+                                    <p class="form-control-static text-danger" style="font-weight: bold;">
+                                        <span class="glyphicon glyphicon-ban-circle"></span> No disponible
+                                    </p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        {% if user.role == 'ING' %}
+                            <div class="text-left" style="float:left;">
+                                <a id="remove-button" class="btn btn-default"
+                                   href="{% url 'scan.views.delete_relation' filename=draw.filename %}">
+                                    <span class="glyphicon glyphicon-trash"></span> Eliminar</a>
+                            </div>
+                        {% endif %}
+                        <a class="btn btn-default"
+                           href="{% url 'scan.views.list_relation' %}">
+                            Cancelar
+                        </a>
+                        <button class="btn btn-primary" type="submit">Aceptar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!-- ./modal-dialog -->
+    </div>
+{% endblock %}
+
+
+{% block custom_script %}
+    <script>
+        $(document).ready(function () {
+            $("#type").select2({
+                placeholder: "Seleccione un tipo",
+                minimumResultsForSearch: 4
+            });
+
+            // Add confirmation on remove buttons.
+            $("a[id*='remove-button']").click(function() {
+                if (window.confirm("¿Está seguro de que desea eliminar el plano?")) {
+                    return true;
+                }
+                return false;
+            });
+
+            // Form validation
+            $('#edit-relation-form').submit(function () {
+                var reference = $('#reference').val();
+                if (!utils.validateString(reference)) {
+                    $('#relation-error').addClass('has-error');
+                    $('.error-label:visible').fadeOut(); // If label is visible fade it out.
+                    $('.error-label').addClass('control-label').fadeIn().focus();
+
+                    return false; // Don't submit.
+                }
+                return true; // Submit!
+            });
+        });
+    </script>
+{% endblock %}

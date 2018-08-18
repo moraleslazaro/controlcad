@@ -1,0 +1,67 @@
+{% extends 'cod/cod_base.html' %}
+
+{% block breadcrumb %}
+    <ol class="breadcrumb breadcrumb-sm">
+        <li><a href="{% url 'cad.views.list_codificators' %}">Listado</a></li>
+        <li class="active">Nuevo</li>
+    </ol>
+{% endblock %}
+
+{% block content %}
+    <div class="container main-content">
+        <div class="modal-dialog inline" style="width: 400px;">
+            <form method="POST" action="{% url 'cad.views.add_codificator' %}" role="form" id="new-codificator-form">
+                {% csrf_token %}
+                <input type="hidden" name="previous" value="{{ previous }}">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Añadir codificador</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group" id="code-error">
+                            <label class="control-label" for="code">Código</label>
+                            <input type="text" name="code" id="code" placeholder="Código"
+                                   class="form-control" required autofocus/>
+                            <label class="error-label" for="code" id="code-error-label">
+                                <i class="fa fa-question-circle fa-lg"></i> Caracteres inválidos.
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label for="description">Descripción</label>
+                            <textarea class="form-control" id="description" rows="6"
+                                      placeholder="Descripción" name="description" style="resize:none" required></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <a class="btn btn-default"
+                           href="{% url 'cad.views.list_codificators' %}">
+                            Cancelar
+                        </a>
+                        <button class="btn btn-primary" type="submit"><span class="glyphicon glyphicon-plus"></span>
+                            AÑADIR
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div><!-- ./modal-dialog -->
+    </div>
+{% endblock %}
+
+{% block custom_script %}
+<script>
+    (function () {
+        $('#new-codificator-form').submit(function () {
+            var code = $('#code').val();
+
+            if (!utils.validateString(code)) {
+                $('#code-error').addClass('has-error');
+                $('.error-label:visible').fadeOut(); // If label is visible fade it out.
+                $('.error-label').addClass('control-label').fadeIn().focus();
+                return false; // Don't submit.
+            }
+
+            return true; // Submit!
+        });
+    })();
+</script>
+{% endblock %}

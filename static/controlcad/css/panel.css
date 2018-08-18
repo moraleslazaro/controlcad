@@ -1,0 +1,56 @@
+/* data panel */
+.main-content > .panel-default > .panel-heading {
+    border-color: #d8d8d8;
+    border-top: 1px solid #d8d8d8;
+    background-image: linear-gradient(to bottom, #f8f8f8 0, #f1f1f1 100%);
+    background-repeat: repeat-x;
+    padding: 6px;
+    border-radius: 0;
+    border-left: 1px solid #d8d8d8;
+    border-right: 1px solid #d8d8d8;
+}
+
+.main-content > .panel-default {
+    border-color: rgba(255, 255, 255, 0);
+    border-bottom: 1px solid #d8d8d8;
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+    background-color: transparent;
+}
+
+.panel-search {
+    padding-left: 0;
+}
+
+.panel-body {
+    padding: 0;
+    border: 1px solid #d8d8d8;
+    border-top: 0;
+    background-color: #fff;
+}
+
+.data-grid {
+    margin-bottom: 0;
+}
+
+.toolbar {
+    width: inherit;
+}
+
+.paginator-text {
+    padding-top: 5px;
+    padding-right: 10px;
+    float: right;
+}
+
+.panel-buttons {
+    padding-left: 0;
+}
+
+.cad-versions-panel > .footer{
+    border-color: #d8d8d8;
+    border-top: 1px solid #d8d8d8;
+    background-image: linear-gradient(to bottom, #f8f8f8 0, #f1f1f1 100%);
+    background-repeat: repeat-x;
+    padding: 6px;
+}

@@ -1,0 +1,17 @@
+CONTROLCAD
+==========
+
+ ControlCAD is managed throught the `initialize.bat` script. This script launch
+ a Windows shell with all the settings adjusted in order to properly run the
+ application. The available options are:
+
+ runserver    Execute the WSGI web server at 127.0.0.1:8080 by default. This can
+              be changed by passing an argument that contains the address and
+              port in the form described above. ( e.g. 192.168.10:80 )
+
+ shell        Execute the Django interactive shell, by default is IPython.
+
+ database     Execute the SQLite database command line interface.
+
+ Once the application is running type user `admin` and password `admin` in order
+ to log into the administration panel.

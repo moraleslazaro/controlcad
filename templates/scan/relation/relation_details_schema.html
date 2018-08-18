@@ -1,0 +1,58 @@
+{% extends 'scan/relation/relation_base.html' %}
+
+{% block breadcrumb %}
+    <ol class="breadcrumb breadcrumb-sm">
+        <li><a href="{% url 'scan.views.list_relation' %}">Listado</a></li>
+        <li class="active">Plano {{ draw }}</li>
+    </ol>
+{% endblock %}
+
+{% block content %}
+    <div class="container main-content">
+        <div class="modal-dialog inline">
+            <form method="POST" action="">
+                {% csrf_token %}
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Plano {{ draw}}</h4>
+                    </div>
+                    <div class="modal-body cad-details">
+                        <ul class="nav nav-tabs nav-tabs-google versions-nav">
+                            <li><a href="{% url 'scan.views.show_relation_info' code=draw.code %}">Información</a></li>
+                            <li><a href="{% url 'scan.views.show_relation_preview' code=draw.code %}">Vista previa</a></li>
+                            <li class="active"><a href="#">Esquema</a></li>
+                        </ul>
+
+                        <div class="well" style="margin-bottom: 0; padding: 10px;">
+                            <img class="img-thumbnail" src="{% url 'scan.views.schema_inline' filename=schema.filename %}">
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <div class="text-left" style="float:left;">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                    <i class="fa fa-cog"></i> Opciones <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a href="{% url 'scan.views.schema_inline' filename=schema.filename %}" style="font-weight: bold;"
+                                            data-lightbox="{{ schema.filename }}" data-title="{{ schema.filename }}">
+                                        <span class="glyphicon glyphicon-fullscreen"></span> Pantalla completa</a></li>
+                                    <li><a href="{% url 'scan.views.print_schema' reference=schema.reference %}" target="_blank" style="font-weight: bold;"><span class="glyphicon glyphicon-print"></span> Imprimir</a></li>
+                                    <li>
+                                        <a href="{% url 'scan.views.schema_download' filename=schema.filename %}" style="font-weight: bold;">
+                                            <span class="glyphicon glyphicon-download-alt"></span> Descargar
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <a class="btn btn-default" href="{% url 'scan.views.list_relation' %}">Cancelar</a>
+                        <a class="btn btn-primary" href="{% url 'scan.views.list_relation' %}">Aceptar</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!-- ./modal-dialog -->
+    </div>
+{% endblock %}

@@ -1,0 +1,154 @@
+{% extends 'admin/admin_base.html' %}
+
+{% block breadcrumb %}
+    <ol class="breadcrumb breadcrumb-sm">
+        <li><a href="{% url 'admin.views.admin_user_list' %}">Usuarios</a></li>
+        <li class="active">Editar</li>
+    </ol>
+{% endblock %}
+
+{% block content %}
+    <div class="container main-content">
+        <div class="modal-dialog inline" style="width: 400px;">
+            <form method="POST" action="{% url 'admin.views.admin_user_edit' id=selected_user.id %}"
+                  class="form-horizontal" role="form" id="admin-user-edit-form">
+                {% csrf_token %}
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Editar usuario </h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group" id="username-error">
+                            <label for="username" class="col-sm-3 control-label">Usuario</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="username" placeholder="Nombre de usuario"
+                                       value="{{ selected_user.username }}" name="username" required autofocus>
+                                <label class="error-label" for="username" id="username-error-label">
+                                    <i class="fa fa-question-circle fa-lg"></i> Caracteres inválidos.
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group" id="first-name-error">
+                            <label for="first-name" class="col-sm-3 control-label">Nombre</label>
+
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="first-name" placeholder="Nombre"
+                                       value="{{ selected_user.first_name }}" name="first-name" required>
+                                <label class="error-label" for="first-name" id="first-name-error-label">
+                                    <i class="fa fa-question-circle fa-lg"></i> Caracteres inválidos.
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group" id="last-name-error">
+                            <label for="last-name" class="col-sm-3 control-label">Apellido</label>
+
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="last-name" placeholder="Apellido"
+                                       value="{{ selected_user.last_name }}" name="last-name" required>
+                                <label class="error-label" for="last-name" id="last-name-error-label">
+                                    <i class="fa fa-question-circle fa-lg"></i> Caracteres inválidos.
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="email" class="col-sm-3 control-label">Email</label>
+
+                            <div class="col-sm-9">
+                                <input type="email" class="form-control" id="email" placeholder="Email"
+                                       value="{{ selected_user.email }}" name="email" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="role" class="col-sm-3 control-label">Categoría</label>
+
+                            <div class="col-sm-9">
+                                <select class="form-control" id="role" name="role" required>
+                                    <option></option>
+                                    <option value="DIB" {% if selected_user.role == "DIB" %}selected{% endif %}>
+                                        Dibujante
+                                    </option>
+                                    <option value="PRO" {% if selected_user.role == "PRO" %}selected{% endif %}>
+                                        Proyectista
+                                    </option>
+                                    <option value="ING" {% if selected_user.role == "ING" %}selected{% endif %}>
+                                        Ingeniero Principal
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-3 col-sm-9">
+                                <div class="checkbox">
+                                    <label>
+                                        <input name="is-admin" id="is-admin" type="checkbox" {% if selected_user.is_admin %} checked{% endif %}> Administrador
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <div class="text-left" style="float:left;">
+                            <a class="btn btn-default"
+                               href="{% url 'admin.views.admin_user_change_password' id=selected_user.id %}">
+                                <span class="glyphicon glyphicon-lock"></span> Contraseña</a>
+                        </div>
+                        <a class="btn btn-default" href="{% url 'admin.views.admin_user_list' %}">Cancelar</a>
+                        <button class="btn btn-primary" type="submit">Aceptar</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!-- ./modal-dialog -->
+    </div>
+{% endblock %}
+
+{% block custom_script %}
+    <script>
+        $(document).ready(function () {
+            $("#role").select2({
+                placeholder: "Seleccione una categoría",
+                minimumResultsForSearch: 6
+            });
+
+            $('#admin-user-edit-form').submit(function () {
+                var username  = $('#username').val();
+                var firstname = $('#first-name').val();
+                var lastname  = $('#last-name').val();
+
+                var is_form_valid = true;
+
+                if (!utils.validateString(username)) {
+                    $('#username-error').addClass('has-error');
+                    $('#username-error-label:visible').fadeOut(); // If label is visible fade it out.
+                    $('#username-error-label').addClass('control-label').fadeIn().focus();
+                    is_form_valid = false;
+                } else {
+                    $('#username-error').removeClass('has-error');
+                    $('#username-error-label').hide();
+                }
+
+                if (!utils.spanishValidation(firstname)) {
+                    $('#first-name-error').addClass('has-error');
+                    $('#first-name-error-label:visible').fadeOut(); // If label is visible fade it out.
+                    $('#first-name-error-label').addClass('control-label').fadeIn().focus();
+                    is_form_valid = false;
+                } else {
+                    $('#first-name-error').removeClass('has-error');
+                    $('#first-name-error-label').hide();
+                }
+
+                if (!utils.spanishValidation(lastname)) {
+                    $('#last-name-error').addClass('has-error');
+                    $('#last-name-error-label:visible').fadeOut(); // If label is visible fade it out.
+                    $('#last-name-error-label').addClass('control-label').fadeIn().focus();
+                    is_form_valid = false;
+                } else {
+                    $('#last-name-error').removeClass('has-error');
+                    $('#last-name-error-label').hide();
+                }
+
+                return is_form_valid; // If everything is right submit.
+            });
+        });
+    </script>
+{% endblock %}

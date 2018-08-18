@@ -1,0 +1,7 @@
+ControlCAD TODO item list
+=========================
+
+   - Add a section for managing codificators.       [IMPORTANT] [Checked]
+   - Improve validations on user input.
+   - Enhance URL handling.
+   - Add codificator support to SingleImageDraw.

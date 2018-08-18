@@ -1,0 +1,64 @@
+{% extends 'scan/single/single_base.html' %}
+
+{% block breadcrumb %}
+    <ol class="breadcrumb breadcrumb-sm">
+        <li><a href="{% url 'scan.views.list_single' %}">Listado</a></li>
+        <li class="active">Plano {{ draw }}</li>
+    </ol>
+{% endblock %}
+
+{% block content %}
+    <div class="container main-content">
+        <div class="modal-dialog inline">
+            <form method="POST" action="">
+                {% csrf_token %}
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">Plano {{ draw}}</h4>
+                    </div>
+                    <div class="modal-body cad-details">
+                        <ul class="nav nav-tabs nav-tabs-google versions-nav">
+                            <li><a href="{% url 'scan.views.show_single_info' number=draw.number %}">Información</a></li>
+                            <li class="active"><a href="#">Vista previa</a></li>
+                        </ul>
+
+                        <div class="well" style="margin-bottom: 0; padding: 10px;">
+                            <img class="img-thumbnail" src="{% url 'scan.views.single_inline' filename=draw.filename %}">
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <div class="text-left" style="float:left;">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                                    <i class="fa fa-cog"></i> Opciones <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li>
+                                        <a href="{% url 'scan.views.single_inline' filename=draw.filename %}" style="font-weight: bold;"
+                                           data-lightbox="{{ draw.filename }}" data-title="{{ draw.filename }}">
+                                            <span class="glyphicon glyphicon-fullscreen"></span> Pantalla completa
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{% url 'scan.views.print_single' number=draw.number %}" target="_blank"
+                                           style="font-weight: bold;"><span class="glyphicon glyphicon-print"></span> Imprimir
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="{% url 'scan.views.single_download' filename=draw.filename %}" style="font-weight: bold;">
+                                            <span class="glyphicon glyphicon-download-alt"></span> Descargar
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <a class="btn btn-default" href="{% url 'scan.views.list_single' %}">Cancelar</a>
+                        <a class="btn btn-primary" href="{% url 'scan.views.list_single' %}">Aceptar</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!-- ./modal-dialog -->
+    </div>
+{% endblock %}

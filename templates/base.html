@@ -1,0 +1,47 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="{% static 'controlcad/img/rocket.png' %}">
+
+    <title>{% block title %}ControlCAD{% endblock %}</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="{% static  'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <!-- TODC Bootstrap core CSS -->
+    <link href="{% static 'bootstrap/css/todc-bootstrap.min.css' %}" rel="stylesheet">
+    <!-- Lightbox -->
+    <link href="{% static 'lightbox/css/lightbox.css' %}" rel="stylesheet">
+    {% block styles %}
+    {% endblock %}
+    {% block custom_style %}{% endblock %}
+</head>
+
+<body>
+{% block navbar %}{% endblock %}
+
+{% block messages %}
+    {% for message in messages %}
+        <div id="messages-region">
+            <div class="alert alert-warning" id="alert-message">{{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}
+
+{% block body %}{% endblock %}
+<!-- 3rd Party and ControlCAD scripts
+================================================== -->
+<script src="{% static 'jquery/jquery.js' %}"></script>
+<script src="{% static 'bootstrap/js/bootstrap.js' %}"></script>
+<script src="{% static 'lightbox/js/lightbox.min.js' %}"></script>
+{% block scripts_files %}{% endblock %}
+{% block custom_script %}{% endblock %}
+</body>
+</html>
