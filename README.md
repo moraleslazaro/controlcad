@@ -12,4 +12,10 @@ After cloning the repo, provision the VM using vagrant:
 
 `$ vagrant up --provision`
 
-ControlCAD should be running on `http://localhost:8080`
+ControlCAD should be running on `http://localhost:8080` and show this welcome page:
+
+![alt text](https://github.com/moraleslazaro/controlcad/blob/master/docs/welcome.png "ControlCAD welcome page")
+
+You can also sign in as one of the predefined users. Use username `finol` and password `finol` to login as a project manager.
+
+![alt text](https://github.com/moraleslazaro/controlcad/blob/master/docs/main.png "ControlCAD main page")
