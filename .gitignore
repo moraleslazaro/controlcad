@@ -105,3 +105,6 @@ venv.bak/
 
 # Vagrant
 .vagrant
+
+# Vim
+*.swp
