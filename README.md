@@ -6,7 +6,7 @@ The application is built on Django/Python and SQLite and it is configured to be 
 
 Once the application is running use the user `admin` and password `admin` in order to log into the administration panel.
 
-## Running ControlCAD
+### Running ControlCAD
 
 After cloning the repo, provision the VM using vagrant:
 
