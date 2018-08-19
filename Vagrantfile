@@ -71,6 +71,6 @@ Vagrant.configure("2") do |config|
     apt-get install python-pip sqlite3 -y
     pip install -r /vagrant/requirements.txt
     cd /vagrant
-    ./manage.py runserver 10.0.2.15:8000 &
+    ./manage.py runserver 0.0.0.0:8000 &
   SHELL
 end
