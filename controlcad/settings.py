@@ -34,7 +34,7 @@ DATABASES = {
         #'ENGINE': 'sqlserver_ado',
         #'HOST': '192.168.146.128,1433',
         #'USER': 'sa',
-        #'PASSWORD': 'intel200',
+        #'PASSWORD': 'abc123',
         #'NAME': 'FABRICABD',
         #'OPTIONS': {
             #'provider': 'SQLOLEDB'
@@ -58,7 +58,7 @@ LOGIN_REDIRECT_URL = '/'
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ['localhost', '10.0.2.15']
+ALLOWED_HOSTS = ['localhost']
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
