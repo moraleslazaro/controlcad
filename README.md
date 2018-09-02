@@ -27,6 +27,10 @@ That image will have all the tools and ControlCAD inside to create containers us
 Argument `-d` will make the the container to run on the background, remove it and it will show the output
 of the Python WSGI server.
 
+If you are running Docker client and server on the same host you can also mount the development folder on the
+container to update the changes automatically. Use the following command:
+`docker run --rm -d --mount type=bind,source="$(pwd)",target=/controlcad -p 8080:8000 local/django` 
+
 ControlCAD should be running then on `http://localhost:8080` and show this welcome page:
 
 ![alt text](https://github.com/moraleslazaro/controlcad/blob/master/docs/welcome.png "ControlCAD welcome page")
