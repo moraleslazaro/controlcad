@@ -20,13 +20,14 @@ If you are using Docker you can build and image with all the tools using:
 
 `docker build -t local/django .`
 
-That image will have all the tools and controlcad inside to create containers using:
+That image will have all the tools and ControlCAD inside to create containers using:
 
 `docker run --rm -d -p 8080:8000 local/django`
 
-The container will be running on the background.
+Argument `-d` will make the the container to run on the background, remove it and it will show the output
+of the Python WSGI server.
 
-ControlCAD should be running on `http://localhost:8080` and show this welcome page:
+ControlCAD should be running then on `http://localhost:8080` and show this welcome page:
 
 ![alt text](https://github.com/moraleslazaro/controlcad/blob/master/docs/welcome.png "ControlCAD welcome page")
 
