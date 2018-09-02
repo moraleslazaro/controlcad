@@ -28,7 +28,8 @@ Argument `-d` will make the the container to run on the background, remove it an
 of the Python WSGI server.
 
 If you are running Docker client and server on the same host you can also mount the development folder on the
-container to update the changes automatically. Use the following command:
+container to update the changes automatically. Use the following command: 
+
 `docker run --rm -d --mount type=bind,source="$(pwd)",target=/controlcad -p 8080:8000 local/django` 
 
 ControlCAD should be running then on `http://localhost:8080` and show this welcome page:
