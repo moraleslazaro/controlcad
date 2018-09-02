@@ -8,9 +8,23 @@ Once the application is running use the user `admin` and password `admin` in ord
 
 ### Running ControlCAD
 
-After cloning the repo, provision the VM using vagrant:
+#### Vagrant
+
+After cloning the repo, provision the VM using the following command:
 
 `$ vagrant up --provision`
+
+#### Docker
+
+If you are using Docker you can build and image with all the tools using:
+
+`docker build -t local/django .`
+
+That image will have all the tools and controlcad inside to create containers using:
+
+`docker run --rm -d -p 8080:8000 local/django`
+
+The container will be running on the background.
 
 ControlCAD should be running on `http://localhost:8080` and show this welcome page:
 
