@@ -9,8 +9,11 @@
 #	# Build the image
 #	docker build -t moraleslazaro/django .
 #
+#       # Running docker client and server on the same host
+#	docker run --rm --mount type=bind,source=${pwd},target=/controlcad -p 8080:8000 moraleslazaro/django
 #
-#	docker run --rm -v ${PWD}:/controlcad -p 8080:8000 moraleslazaro/django  
+#   	# Running docker server on a different hosts without the controlcad folder
+#	docker run --rm -p 8080:8000 moraleslazaro/django  
 
 # Base docker image
 FROM debian
@@ -23,5 +26,5 @@ COPY . /controlcad
 RUN apt-get update && apt-get install python-pip -y && pip install -r requirements.txt
 
 # Autorun ControlCAD
-ENTRYPOINT [ "/controlcad/manage.py", "runserver", "0.0.0.0:8000" ]
+ENTRYPOINT [ "python", "manage.py", "runserver", "0.0.0.0:8000" ]
 
