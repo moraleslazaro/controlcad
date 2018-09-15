@@ -16,7 +16,7 @@ After cloning the repo, provision the VM using the following command:
 
 #### Docker
 
-If you are using Docker you can build and image with all the tools using:
+If you are using Docker you can build an image with all the tools using:
 
 `docker build -t local/django .`
 
