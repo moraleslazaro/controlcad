@@ -9,11 +9,12 @@
 #	# Build the image
 #	docker build -t moraleslazaro/django .
 #
-#       # Running docker client and server on the same host
+#       # Running docker client and server on the same host using mount will
+#       # update the development folder automatically.
 #	docker run --rm --mount type=bind,source=${pwd},target=/controlcad -p 8080:8000 moraleslazaro/django
 #
 #   	# Running docker server on a different hosts without the controlcad folder
-#	docker run --rm -p 8080:8000 moraleslazaro/django  
+#	docker run -d --rm -p 8080:8000 moraleslazaro/django  
 
 # Base docker image
 FROM debian
